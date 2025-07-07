@@ -6,7 +6,7 @@ import { Hero } from '@/components/Hero';
 import { About } from '@/components/About';
 import { Projects } from '@/components/Projects';
 import { GitHubProjects } from '@/components/GitHubProjects';
-import { LinkedInPosts } from '@/components/LinkedInPosts';
+// import { LinkedInPosts } from '@/components/LinkedInPosts';
 import { Education } from '@/components/Education';
 import { Experience } from '@/components/Experience';
 import { Contact } from '@/components/Contact';
@@ -28,7 +28,7 @@ const Index = () => {
             <Projects />
           </div>
           <GitHubProjects />
-          <LinkedInPosts />
+          {/* <LinkedInPosts /> */}
           <div data-guide="education">
             <Education />
           </div>
