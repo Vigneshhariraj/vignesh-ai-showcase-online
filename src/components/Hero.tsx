@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 export function Hero() {
   return (
@@ -14,9 +15,16 @@ export function Hero() {
             className="mb-8"
           >
             <div className="relative inline-block">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl sm:text-5xl md:text-6xl font-bold shadow-2xl border-4 border-white mx-auto">
-                VH
-              </div>
+              <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white">
+                <AvatarImage 
+                  src="/api/placeholder/400/400" 
+                  alt="Vignesh Hariraj"
+                  className="object-cover"
+                />
+                <AvatarFallback className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                  VH
+                </AvatarFallback>
+              </Avatar>
               {/* Animated rings around avatar */}
               <div className="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-30"></div>
               <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-pulse opacity-20"></div>
