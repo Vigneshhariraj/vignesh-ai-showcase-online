@@ -50,7 +50,7 @@ export function Header() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
           >
             Vignesh Hariraj
           </motion.div>
@@ -67,12 +67,16 @@ export function Header() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full" />
               </button>
             ))}
-            <ThemeToggle />
+            <div data-guide="theme">
+              <ThemeToggle />
+            </div>
           </nav>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
-            <ThemeToggle />
+            <div data-guide="theme">
+              <ThemeToggle />
+            </div>
             <Button
               variant="ghost"
               size="icon"

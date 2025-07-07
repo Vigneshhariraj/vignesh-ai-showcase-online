@@ -9,7 +9,7 @@ export function Hero() {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative">
+    <section id="home" className="min-h-screen flex items-center justify-center relative" data-guide="hero">
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -17,14 +17,14 @@ export function Hero() {
           transition={{ duration: 0.8 }}
           className="space-y-6"
         >
-          {/* Profile Image */}
+          {/* Profile Image - Responsive sizing */}
           <motion.div
             initial={{ scale: 0, rotate: 180 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mx-auto w-48 h-48 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 p-1 mb-8"
+            className="mx-auto w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 p-1 mb-8 relative z-10"
           >
-            <div className="w-full h-full rounded-full bg-background flex items-center justify-center text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="w-full h-full rounded-full bg-background flex items-center justify-center text-3xl sm:text-4xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
               VH
             </div>
           </motion.div>
@@ -33,7 +33,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-4xl md:text-6xl font-bold mb-4"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 relative z-10"
           >
             Hi, I'm{' '}
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -45,7 +45,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-8"
+            className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8"
           >
             Aspiring Data & ML Engineer
           </motion.p>
@@ -54,7 +54,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8"
+            className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 px-4"
           >
             Passionate about transforming data into intelligent solutions through
             Machine Learning, AI, and cutting-edge technologies. Currently pursuing
@@ -67,6 +67,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
             className="flex justify-center space-x-4 mb-8"
+            data-guide="social"
           >
             <Button
               variant="outline"
@@ -102,7 +103,7 @@ export function Hero() {
           >
             <Button
               size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-8 py-3"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 sm:px-8 py-3 text-sm sm:text-base"
               onClick={scrollToAbout}
             >
               Explore My Work

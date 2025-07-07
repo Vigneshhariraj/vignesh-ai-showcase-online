@@ -9,6 +9,7 @@ import { Education } from '@/components/Education';
 import { Experience } from '@/components/Experience';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
+import { AnimeGuide } from '@/components/AnimeGuide';
 
 const Index = () => {
   return (
@@ -18,13 +19,24 @@ const Index = () => {
         <div className="relative z-10">
           <Header />
           <Hero />
-          <About />
-          <Projects />
-          <Education />
-          <Experience />
-          <Contact />
+          <div data-guide="about">
+            <About />
+          </div>
+          <div data-guide="projects">
+            <Projects />
+          </div>
+          <div data-guide="education">
+            <Education />
+          </div>
+          <div data-guide="experience">
+            <Experience />
+          </div>
+          <div data-guide="contact">
+            <Contact />
+          </div>
           <Footer />
         </div>
+        <AnimeGuide />
       </div>
     </ThemeProvider>
   );
