@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Volume2, VolumeX, Move } from 'lucide-react';
@@ -22,14 +21,22 @@ export function AnimeGuide() {
   const [isCharacterHovered, setIsCharacterHovered] = useState(false);
   const dragRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef({ x: 0, y: 0 });
+  const currentUtterance = useRef<SpeechSynthesisUtterance | null>(null);
 
   const speakText = (text: string) => {
-    if (isMuted) return;
-    
-    // Stop any current speech
+    // Always stop any current speech first
     if ('speechSynthesis' in window) {
       speechSynthesis.cancel();
-      
+      currentUtterance.current = null;
+    }
+
+    // Don't speak if muted
+    if (isMuted) {
+      console.log('Voice is muted, not speaking:', text);
+      return;
+    }
+    
+    if ('speechSynthesis' in window) {
       setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 0.9;
@@ -47,7 +54,20 @@ export function AnimeGuide() {
           utterance.voice = preferredVoice;
         }
         
+        // Store reference to current utterance
+        currentUtterance.current = utterance;
+        
+        // Add event listeners
+        utterance.onend = () => {
+          currentUtterance.current = null;
+        };
+        
+        utterance.onerror = () => {
+          currentUtterance.current = null;
+        };
+        
         speechSynthesis.speak(utterance);
+        console.log('Speaking:', text);
       }, 100);
     }
   };
@@ -83,18 +103,27 @@ export function AnimeGuide() {
   };
 
   const toggleMute = () => {
-    setIsMuted(!isMuted);
-    if (!isMuted) {
-      // If muting, stop current speech
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+    
+    if (newMutedState) {
+      // If muting, stop current speech immediately
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
+        currentUtterance.current = null;
       }
+      console.log('Voice muted');
+      setCurrentMessage({ text: "Voice has been muted. Click the speaker icon to unmute." });
+      setShowMessage(true);
     } else {
-      speakText("Voice is now enabled!");
+      console.log('Voice unmuted');
+      const unmuteMessage = "Voice is now enabled!";
+      setCurrentMessage({ text: unmuteMessage });
+      setShowMessage(true);
+      speakText(unmuteMessage);
     }
   };
 
-  // Dragging functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     dragStart.current = {
@@ -154,7 +183,6 @@ export function AnimeGuide() {
     }
   }, [isDragging]);
 
-  // Update position on window resize
   useEffect(() => {
     const handleResize = () => {
       setPosition(prev => ({
@@ -180,7 +208,6 @@ export function AnimeGuide() {
       loadVoices();
     }
 
-    // Enhanced hover detection with better selectors
     const elements = {
       '[data-guide="about"]': "Here you'll discover Vignesh's technical skills in AI, Machine Learning, and Data Science!",
       '[data-guide="projects"]': "Explore these impressive projects showcasing real-world applications of AI and ML!",
@@ -247,6 +274,8 @@ export function AnimeGuide() {
       cleanupListeners();
       if ('speechSynthesis' in window) {
         speechSynthesis.removeEventListener('voiceschanged', loadVoices);
+        // Stop any ongoing speech when component unmounts
+        speechSynthesis.cancel();
       }
     };
   }, [isCharacterHovered]);
@@ -307,21 +336,25 @@ export function AnimeGuide() {
           </motion.div>
 
           {/* Controls */}
-          <div className="absolute -top-8 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="absolute -top-10 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 bg-white/90 hover:bg-white shadow-sm"
+              className={`h-8 w-8 p-0 shadow-lg border ${
+                isMuted 
+                  ? 'bg-red-100 hover:bg-red-200 text-red-600 border-red-300' 
+                  : 'bg-green-100 hover:bg-green-200 text-green-600 border-green-300'
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
                 toggleMute();
               }}
               title={isMuted ? "Unmute voice" : "Mute voice"}
             >
-              {isMuted ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
             </Button>
-            <div className="h-6 w-6 bg-gray-600/90 rounded-full flex items-center justify-center" title="Drag to move">
-              <Move className="w-3 h-3 text-white" />
+            <div className="h-8 w-8 bg-gray-600/90 rounded-full flex items-center justify-center border border-gray-400" title="Drag to move">
+              <Move className="w-4 h-4 text-white" />
             </div>
           </div>
 
@@ -347,6 +380,10 @@ export function AnimeGuide() {
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowMessage(false);
+                        // Stop speech when closing message
+                        if ('speechSynthesis' in window) {
+                          speechSynthesis.cancel();
+                        }
                       }}
                       title="Close message"
                     >
