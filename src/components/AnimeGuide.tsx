@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Volume2, Move } from 'lucide-react';
+import { MessageCircle, X, Volume2, VolumeX, Move } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
@@ -18,10 +18,14 @@ export function AnimeGuide() {
   });
   const [isVisible, setIsVisible] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isCharacterHovered, setIsCharacterHovered] = useState(false);
   const dragRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef({ x: 0, y: 0 });
 
   const speakText = (text: string) => {
+    if (isMuted) return;
+    
     // Stop any current speech
     if ('speechSynthesis' in window) {
       speechSynthesis.cancel();
@@ -55,12 +59,57 @@ export function AnimeGuide() {
     speakText(message);
   };
 
+  const handleCharacterClick = () => {
+    const welcomeMessage = "Hello! I'm your interactive guide. I can help you navigate through Vignesh's portfolio. Try hovering over different sections!";
+    setCurrentMessage({ text: welcomeMessage });
+    setShowMessage(true);
+    speakText(welcomeMessage);
+  };
+
+  const handleCharacterHover = () => {
+    if (isDragging) return;
+    setIsCharacterHovered(true);
+    const hoverMessage = "Click me for tips or drag me around the screen!";
+    setCurrentMessage({ text: hoverMessage });
+    setShowMessage(true);
+    speakText(hoverMessage);
+  };
+
+  const handleCharacterLeave = () => {
+    setIsCharacterHovered(false);
+    if (!isDragging) {
+      setTimeout(() => setShowMessage(false), 2000);
+    }
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    if (!isMuted) {
+      // If muting, stop current speech
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+      }
+    } else {
+      speakText("Voice is now enabled!");
+    }
+  };
+
   // Dragging functionality
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     dragStart.current = {
       x: e.clientX - position.x,
       y: e.clientY - position.y
+    };
+    e.preventDefault();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setIsDragging(true);
+    dragStart.current = {
+      x: touch.clientX - position.x,
+      y: touch.clientY - position.y
     };
   };
 
@@ -72,7 +121,21 @@ export function AnimeGuide() {
     }
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+    if (isDragging) {
+      const touch = e.touches[0];
+      const newX = Math.max(0, Math.min(window.innerWidth - 100, touch.clientX - dragStart.current.x));
+      const newY = Math.max(0, Math.min(window.innerHeight - 100, touch.clientY - dragStart.current.y));
+      setPosition({ x: newX, y: newY });
+      e.preventDefault();
+    }
+  };
+
   const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
   };
 
@@ -80,9 +143,13 @@ export function AnimeGuide() {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
       };
     }
   }, [isDragging]);
@@ -121,6 +188,7 @@ export function AnimeGuide() {
       '[data-guide="experience"]': "Learn about Vignesh's internships and professional experience in tech!",
       '[data-guide="contact"]': "Ready to collaborate? Use this form to get in touch with Vignesh!",
       '[data-guide="theme"]': "Switch between light and dark themes for the best viewing experience!",
+      '[data-guide="social"]': "Connect with Vignesh on social media and professional platforms!",
       '.hero-section': "Welcome to Vignesh Hariraj's portfolio - your gateway to AI and Data Science excellence!",
       '.projects-grid': "These projects demonstrate cutting-edge AI and ML implementations!",
       '.skills-section': "Discover the technical arsenal powering Vignesh's AI solutions!",
@@ -137,11 +205,16 @@ export function AnimeGuide() {
           };
           const handleLeave = () => {
             console.log('Mouse left:', selector);
-            setShowMessage(false);
+            setTimeout(() => {
+              if (!isCharacterHovered) {
+                setShowMessage(false);
+              }
+            }, 1000);
           };
 
           element.addEventListener('mouseenter', handleEnter);
           element.addEventListener('mouseleave', handleLeave);
+          element.addEventListener('touchstart', handleEnter);
           
           // Store references for cleanup
           (element as any).__guideListeners = { handleEnter, handleLeave };
@@ -157,6 +230,7 @@ export function AnimeGuide() {
           const { handleEnter, handleLeave } = (element as any).__guideListeners;
           element.removeEventListener('mouseenter', handleEnter);
           element.removeEventListener('mouseleave', handleLeave);
+          element.removeEventListener('touchstart', handleEnter);
           delete (element as any).__guideListeners;
         }
       });
@@ -175,7 +249,7 @@ export function AnimeGuide() {
         speechSynthesis.removeEventListener('voiceschanged', loadVoices);
       }
     };
-  }, []);
+  }, [isCharacterHovered]);
 
   if (!isVisible) {
     return (
@@ -195,7 +269,7 @@ export function AnimeGuide() {
       {/* Anime Character */}
       <motion.div
         ref={dragRef}
-        className="fixed z-50 cursor-move"
+        className="fixed z-50 cursor-pointer select-none"
         style={{
           left: position.x,
           top: position.y,
@@ -204,8 +278,12 @@ export function AnimeGuide() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.5 }}
         onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onMouseEnter={handleCharacterHover}
+        onMouseLeave={handleCharacterLeave}
+        onClick={handleCharacterClick}
       >
-        <div className="relative">
+        <div className="relative group">
           {/* Enhanced Anime Character */}
           <motion.div
             className="w-16 h-16 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-xl border-3 border-white relative overflow-hidden"
@@ -228,9 +306,23 @@ export function AnimeGuide() {
             </div>
           </motion.div>
 
-          {/* Drag Handle */}
-          <div className="absolute -top-2 -right-2 w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <Move className="w-3 h-3 text-white" />
+          {/* Controls */}
+          <div className="absolute -top-8 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 w-6 p-0 bg-white/90 hover:bg-white shadow-sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMute();
+              }}
+              title={isMuted ? "Unmute voice" : "Mute voice"}
+            >
+              {isMuted ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+            </Button>
+            <div className="h-6 w-6 bg-gray-600/90 rounded-full flex items-center justify-center" title="Drag to move">
+              <Move className="w-3 h-3 text-white" />
+            </div>
           </div>
 
           {/* Speech Bubble */}
@@ -248,26 +340,18 @@ export function AnimeGuide() {
                     <div className="flex-1">
                       <p className="text-sm text-foreground leading-relaxed">{currentMessage.text}</p>
                     </div>
-                    <div className="flex gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:bg-blue-100"
-                        onClick={() => speakText(currentMessage.text)}
-                        title="Speak text"
-                      >
-                        <Volume2 className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:bg-red-100"
-                        onClick={() => setShowMessage(false)}
-                        title="Close message"
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 hover:bg-red-100"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMessage(false);
+                      }}
+                      title="Close message"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
                   </div>
                   {/* Speech bubble tail */}
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2">
@@ -280,7 +364,9 @@ export function AnimeGuide() {
 
           {/* Status Indicator */}
           <motion.div
-            className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border border-white"
+            className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border border-white ${
+              isMuted ? 'bg-red-400' : 'bg-green-400'
+            }`}
             animate={{ scale: [1, 1.2, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
