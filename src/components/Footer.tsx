@@ -1,7 +1,6 @@
 
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Heart } from 'lucide-react';
-import { Instagram, Facebook, Twitter, Discord } from 'lucide-react';
+import { Github, Linkedin, Mail, Heart, Instagram, Facebook, Twitter, Discord } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Footer() {
