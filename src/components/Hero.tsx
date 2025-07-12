@@ -103,11 +103,17 @@ export function Hero() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6 sm:px-8 py-3 text-sm sm:text-base"
-              onClick={() => window.open('https://www.github.com/Vigneshhariraj', '_blank')}
+              onClick={() => {
+                const element = document.getElementById('projects');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Explore My Work
               <ArrowDown className="ml-2 h-4 w-4" />
             </Button>
+
           </motion.div>
         </div>
       </div>
