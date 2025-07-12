@@ -39,9 +39,10 @@ export function Contact() {
     try {
       // EmailJS configuration
       const serviceId = 'service_nnp3yck';
-      const templateId = 'template_pg5sfdd'; // To YOU
-      const autoReplyTemplateId = 'template_autoreply_xyz'; // To USER
+      const templateId = 'template_pg5sfdd';           // ✅ This sends the email to YOU
+      const autoReplyTemplateId = 'template_of117nh';  // ✅ This sends an AUTO-REPLY to the SENDER
       const publicKey = 'J5S-k-Tr9Qul_5F54';
+
 
       const templateParams = {
         name: data.name,
