@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,30 +35,34 @@ export function Contact() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
-    
+
     try {
-      // EmailJS configuration - Replace these with your actual values
+      // EmailJS configuration
       const serviceId = 'service_nnp3yck';
-      const templateId = 'template_pg5sfdd';
+      const templateId = 'template_pg5sfdd'; // To YOU
+      const autoReplyTemplateId = 'template_autoreply_xyz'; // To USER
       const publicKey = 'J5S-k-Tr9Qul_5F54';
 
       const templateParams = {
         name: data.name,
         email: data.email,
-        title: data.subject,   // title must match EmailJS variable
+        title: data.subject,
         message: data.message,
       };
 
-
+      // 1️⃣ Send to portfolio owner (you)
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      
-      console.log('Email sent successfully:', data);
-      
+
+      // 2️⃣ Send auto-reply to sender
+      await emailjs.send(serviceId, autoReplyTemplateId, templateParams, publicKey);
+
+      console.log('Email and auto-reply sent:', data);
+
       toast({
         title: 'Message Sent Successfully!',
-        description: 'Thank you for reaching out. I\'ll get back to you soon.',
+        description: "Thank you for reaching out. I'll get back to you soon.",
       });
-      
+
       reset();
     } catch (error) {
       console.error('EmailJS error:', error);
