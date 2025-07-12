@@ -1,4 +1,5 @@
 
+
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,22 +14,27 @@ export function Hero() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="mb-8"
+            className="mb-8 relative"
           >
             <div className="relative inline-block">
-              <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white">
+              {/* Background circular element positioned below shoulder */}
+              <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-80 -z-10">
+                {/* Animated rings around the background circle */}
+                <div className="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-30"></div>
+                <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-pulse opacity-20"></div>
+              </div>
+              
+              {/* Main avatar photo positioned above and overlapping the circle */}
+              <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white relative z-10">
                 <AvatarImage 
                   src="/lovable-uploads/9b71ae29-edc9-4b59-829a-98f6a89cec7c.png" 
                   alt="Vignesh Hariraj"
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
                 <AvatarFallback className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 text-white">
                   VH
                 </AvatarFallback>
               </Avatar>
-              {/* Animated rings around avatar */}
-              <div className="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-30"></div>
-              <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-pulse opacity-20"></div>
             </div>
           </motion.div>
 
@@ -115,3 +121,4 @@ export function Hero() {
     </section>
   );
 }
+
