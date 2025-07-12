@@ -1,6 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Discord } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function Footer() {
@@ -49,6 +50,38 @@ export function Footer() {
                 onClick={() => window.open('mailto:vigneshhariraj@gmail.com')}
               >
                 <Mail className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full hover:scale-110 transition-transform"
+                onClick={() => window.open('https://www.instagram.com/_vignesh_exe_', '_blank')}
+              >
+                <Instagram className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full hover:scale-110 transition-transform"
+                onClick={() => window.open('https://www.facebook.com/profile.php?id=100008873411992', '_blank')}
+              >
+                <Facebook className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full hover:scale-110 transition-transform"
+                onClick={() => window.open('https://x.com/vigneshhariraj', '_blank')}
+              >
+                <Twitter className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full hover:scale-110 transition-transform"
+                onClick={() => window.open('https://discord.com/users/YOUR_USER_ID', '_blank')}
+              >
+                <Discord className="h-4 w-4" />
               </Button>
             </div>
           </motion.div>
