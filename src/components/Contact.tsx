@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Phone, MapPin, Linkedin, Github, Send } from 'lucide-react';
+import { Mail, Send } from 'lucide-react';
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -19,39 +19,6 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
-
-const contactInfo = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'vigneshhariraj@gmail.com',
-    href: 'mailto:vigneshhariraj@gmail.com',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+91 9487768253',
-    href: 'tel:+919487768253',
-  },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: 'Trichy, Tamil Nadu, India',
-    href: '#',
-  },
-  {
-    icon: Linkedin,
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/vigneshhariraj',
-    href: 'https://www.linkedin.com/in/vigneshhariraj',
-  },
-  {
-    icon: Github,
-    label: 'GitHub',
-    value: 'github.com/Vigneshhariraj',
-    href: 'https://www.github.com/Vigneshhariraj',
-  },
-];
 
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,8 +36,9 @@ export function Contact() {
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
     try {
+      // For now, just simulate form submission
+      // You'll need to integrate with email service and Google Sheets API
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       console.log('Form submitted:', data);
@@ -105,107 +73,24 @@ export function Contact() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Get In <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Touch</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            I'm always open to discussing new opportunities, collaborations, or just having a chat
-            about AI, ML, and technology. Feel free to reach out!
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Let's discuss opportunities and collaborations. Send me a message!
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
+        <div className="max-w-2xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <div>
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <motion.div
-                    key={info.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center space-x-4 p-4 rounded-lg bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-colors"
-                  >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-                      <info.icon className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">{info.label}</p>
-                      {info.href !== '#' ? (
-                        <a
-                          href={info.href}
-                          target={info.href.startsWith('http') ? '_blank' : undefined}
-                          rel={info.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                          className="text-blue-600 hover:text-blue-700 transition-colors"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-muted-foreground">{info.value}</p>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
-                <CardContent className="p-6">
-                  <h4 className="font-semibold mb-4">Quick Actions</h4>
-                  <div className="space-y-3">
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      onClick={() => window.open('mailto:vigneshhariraj@gmail.com?subject=Job Opportunity')}
-                    >
-                      <Mail className="mr-2 h-4 w-4" />
-                      Send Job Inquiry
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      onClick={() => window.open('mailto:vigneshhariraj@gmail.com?subject=Collaboration Proposal')}
-                    >
-                      <Send className="mr-2 h-4 w-4" />
-                      Propose Collaboration
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start"
-                      onClick={() => window.open('/resume.pdf', '_blank')}
-                    >
-                      <Github className="mr-2 h-4 w-4" />
-                      Download Resume
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
             <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-2xl">Send a Message</CardTitle>
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl flex items-center justify-center gap-2">
+                  <Mail className="h-6 w-6" />
+                  Send a Message
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
