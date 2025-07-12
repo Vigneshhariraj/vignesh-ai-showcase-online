@@ -44,12 +44,12 @@ export function Contact() {
       const publicKey = 'J5S-k-Tr9Qul_5F54';
 
       const templateParams = {
-        from_name: data.name,
-        from_email: data.email,
-        subject: data.subject,
+        name: data.name,
+        email: data.email,
+        title: data.subject,   // title must match EmailJS variable
         message: data.message,
-        to_name: 'Your Name', // Replace with your name
       };
+
 
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
       
