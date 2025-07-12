@@ -1,5 +1,3 @@
-
-
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,13 +22,8 @@ export function Hero() {
                 <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-pulse opacity-20"></div>
               </div>
               
-              {/* Main avatar photo positioned above and overlapping the circle */}
+              {/* Main avatar showing VH initials */}
               <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white relative z-10">
-                <AvatarImage 
-                  src="/lovable-uploads/9b71ae29-edc9-4b59-829a-98f6a89cec7c.png" 
-                  alt="Vignesh Hariraj"
-                  className="object-cover object-top"
-                />
                 <AvatarFallback className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 text-white">
                   VH
                 </AvatarFallback>
@@ -121,4 +114,3 @@ export function Hero() {
     </section>
   );
 }
-
