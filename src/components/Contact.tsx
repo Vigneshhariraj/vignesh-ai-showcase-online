@@ -39,9 +39,9 @@ export function Contact() {
     
     try {
       // EmailJS configuration - Replace these with your actual values
-      const serviceId = 'YOUR_SERVICE_ID';
-      const templateId = 'YOUR_TEMPLATE_ID';
-      const publicKey = 'YOUR_PUBLIC_KEY';
+      const serviceId = 'service_nnp3yck';
+      const templateId = 'template_pg5sfdd';
+      const publicKey = 'J5S-k-Tr9Qul_5F54';
 
       const templateParams = {
         from_name: data.name,
