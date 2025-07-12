@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import emailjs from '@emailjs/browser';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,11 +38,22 @@ export function Contact() {
     setIsSubmitting(true);
     
     try {
-      // For now, just simulate form submission
-      // You'll need to integrate with email service and Google Sheets API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // EmailJS configuration - Replace these with your actual values
+      const serviceId = 'YOUR_SERVICE_ID';
+      const templateId = 'YOUR_TEMPLATE_ID';
+      const publicKey = 'YOUR_PUBLIC_KEY';
+
+      const templateParams = {
+        from_name: data.name,
+        from_email: data.email,
+        subject: data.subject,
+        message: data.message,
+        to_name: 'Your Name', // Replace with your name
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
       
-      console.log('Form submitted:', data);
+      console.log('Email sent successfully:', data);
       
       toast({
         title: 'Message Sent Successfully!',
@@ -50,6 +62,7 @@ export function Contact() {
       
       reset();
     } catch (error) {
+      console.error('EmailJS error:', error);
       toast({
         title: 'Error',
         description: 'Failed to send message. Please try again.',
@@ -73,9 +86,6 @@ export function Contact() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Get In <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Touch</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Let's discuss opportunities and collaborations. Send me a message!
-          </p>
         </motion.div>
 
         <div className="max-w-2xl mx-auto">
