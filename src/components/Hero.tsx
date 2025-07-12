@@ -14,21 +14,13 @@ export function Hero() {
             transition={{ duration: 0.8 }}
             className="mb-8 relative"
           >
-            <div className="relative inline-block">
-              {/* Background circular element positioned below shoulder */}
-              <div className="absolute top-16 left-1/2 transform -translate-x-1/2 w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full opacity-80 -z-10">
-                {/* Animated rings around the background circle */}
-                <div className="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-30"></div>
-                <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-pulse opacity-20"></div>
-              </div>
-              
-              {/* Main avatar showing VH initials */}
-              <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white relative z-10">
-                <AvatarFallback className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 text-white">
-                  VH
-                </AvatarFallback>
-              </Avatar>
-            </div>
+              <div className="relative inline-block">
+              <Avatar className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto shadow-2xl border-4 border-white">
+              <AvatarImage 
+                  src="/api/placeholder/400/400" 
+                  alt="Vignesh Hariraj"
+                  className="object-cover"
+              />
           </motion.div>
 
           <motion.h1
